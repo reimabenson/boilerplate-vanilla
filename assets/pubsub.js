@@ -1,0 +1,1 @@
+"use strict";let subscribers={};function subscribe(s,r){if(subscribers[s]===void 0)subscribers[s]=[];subscribers[s]=[...subscribers[s],r];return function unsubscribe(){subscribers[s]=subscribers[s].filter((s=>s!==r))}}function publish(s,r){if(subscribers[s]){const b=subscribers[s].map((s=>s(r)));return Promise.all(b)}else return Promise.resolve()}
