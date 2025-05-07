@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import path from "path";
 import fs from "fs";
+import CleanPlugin from "vite-plugin-clean"
 
 // JS files from the `src/js`
 const jsDir = path.resolve(__dirname, "src/js");
@@ -45,8 +46,19 @@ addStyleEntries("templates", "template-");
 addStyleEntries("helpers");
 
 export default defineConfig({
+  plugins: [
+    CleanPlugin({
+      targets: [
+        {
+          path: "assets",
+          extensions: [".js", ".css", ".map"],
+        },
+      ],
+    })
+  ],
   build: {
     outDir: "assets",
+    emptyOutDir: false,
     rollupOptions: {
       input: {
         ...jsEntries,
@@ -62,20 +74,20 @@ export default defineConfig({
     },
     minify: "terser",
     terserOptions: {
-      toplevel: false, // Disable top-level optimizations
-      keep_classnames: true, // Keep class names
-      keep_fnames: true, // Keep function names
+      toplevel: false,
+      keep_classnames: true,
+      keep_fnames: true,
       compress: {
         defaults: false,
         toplevel: false,
       },
       mangle: {
-        toplevel: false, // Disable top-level name mangling
+        toplevel: false,
       },
       format: {
-        comments: false, // Remove comments
+        comments: false,
       },
     },
-    cssCodeSplit: true, // Split CSS files per entry
+    cssCodeSplit: true,
   },
 });
